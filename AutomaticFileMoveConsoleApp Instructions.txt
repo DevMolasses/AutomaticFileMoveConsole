@@ -1,0 +1,31 @@
+AutomaticFileMoveConsoleApp.exe
+   1. Copy the app to the desktop of the Gateway
+   2. Double-Click the app to launch
+   3. Input the full path for the Source Directory
+      a.   Manually - Type the source path for the file type you want to move.  This is desired 
+	   because you won't have to wait for the Gateway to load a lot of files
+         i. Time Series Path - D:\siNetNode\TimeSeries
+        ii. Tag Log Task Path - D:\siNetNode\LogTasks\TagLogTask
+      b. Copy-Paste Method
+         i. Use Start->Computer to open a windows explorer window
+        ii. Navigate to the desired folder
+       iii. Click in the field at the top of the window that shows the folder path.  This 
+	    should convert the images in the field to text and automatically select the text.
+        iv. Copy with Ctrl+C
+         v. In the AutomaticFileMoveConsoleApp window, right-click on the title bar and 
+	    select Edit->Paste
+   4. Press enter
+   5. Input the full path for the Destination Directory
+      a. This may be easier using the Copy-Paste method described in step 3.b because the 
+         directory for a drive shared over Remote Desktop Connection is not normal.
+   6. Press Enter
+   7. At this point the program takes over.  It will move all of the files in the Source Folder to the 
+      Destination Folder without any more intervention.
+      a. Make sure to leave the Remote Desktop Connection active.  If you don't the program 
+	 will error out because it won't be able to find the shared drive.
+      b. The app will display the files that are being transferred so you can see the progress.
+      c. At any point if you need to cancel the moving operation, press Ctrl+C.  This will stop the 
+	 execution and close the app.  Note that any files moved prior to cancellation will still be 
+	 in the destination directory.
+   8. When the program is complete it will instruct you to press enter to close the app.
+   9. If additional directories need to be moved, repeat steps 2 - 9.
