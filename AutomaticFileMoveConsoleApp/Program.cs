@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Threading;
 
 namespace AutomaticFileMoveConsoleApp
 {
@@ -43,9 +44,25 @@ namespace AutomaticFileMoveConsoleApp
                 }
             }
             #endregion
-
+            DateTime startTime = DateTime.Now;
+            Console.WriteLine("Start Time: {0}", startTime);
+            //short timeToWait = 300;
+            //Console.WriteLine("Waiting for {0} seconds...",timeToWait);
+            //for (short i = timeToWait; i > 0; i--)
+            //{
+            //    Thread.Sleep(1000);
+            //    Console.SetCursorPosition(0, Console.CursorTop - 1);
+            //    Console.Write(new string(' ', Console.WindowWidth));
+            //    Console.SetCursorPosition(0, Console.CursorTop - 1);
+                
+            //    Console.WriteLine("Waiting for {0} seconds...", i);
+            //}
             MoveAllExistingFiles(sourceDirectory);
-
+            DateTime endTime = DateTime.Now;
+            Console.WriteLine("Start Time: {0}", startTime);
+            Console.WriteLine("End Time: {0}", endTime);
+            TimeSpan elapsedTime = endTime - startTime;
+            Console.WriteLine("Total Elapsed Time (hours): {0}", elapsedTime.TotalHours);
             Console.WriteLine("Press any key to close...");
             Console.ReadKey();
 
