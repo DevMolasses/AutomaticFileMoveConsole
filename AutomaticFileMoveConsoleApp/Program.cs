@@ -9,7 +9,6 @@ namespace AutomaticFileMoveConsoleApp
 {
     class Program
     {
-        static ulong filesMovedCount = 0;
         static string sourceDirectory;
         static string destinationDirectory;
 
@@ -46,17 +45,6 @@ namespace AutomaticFileMoveConsoleApp
             #endregion
             DateTime startTime = DateTime.Now;
             Console.WriteLine("Start Time: {0}", startTime);
-            //short timeToWait = 300;
-            //Console.WriteLine("Waiting for {0} seconds...",timeToWait);
-            //for (short i = timeToWait; i > 0; i--)
-            //{
-            //    Thread.Sleep(1000);
-            //    Console.SetCursorPosition(0, Console.CursorTop - 1);
-            //    Console.Write(new string(' ', Console.WindowWidth));
-            //    Console.SetCursorPosition(0, Console.CursorTop - 1);
-                
-            //    Console.WriteLine("Waiting for {0} seconds...", i);
-            //}
             MoveAllExistingFiles(sourceDirectory);
             DateTime endTime = DateTime.Now;
             Console.WriteLine("Start Time: {0}", startTime);
@@ -81,6 +69,8 @@ namespace AutomaticFileMoveConsoleApp
 
         static void MoveAllExistingFiles(string sourcePath)
         {
+            Console.WriteLine("Processing: {0}", sourcePath);
+            #region Gather all sub-dreictories
             string[] directories = Directory.GetDirectories(sourcePath);
             foreach (string directory in directories)
             {
@@ -88,18 +78,36 @@ namespace AutomaticFileMoveConsoleApp
                 if (!Directory.Exists(curDestinationDirectory))
                 {
                     Directory.CreateDirectory(curDestinationDirectory);
-                    Console.WriteLine(String.Format("New Directory: {0}", curDestinationDirectory));
                 }
                 MoveAllExistingFiles(directory);
             }
+            #endregion
 
             string[] files = Directory.GetFiles(sourcePath);
+            int index = 0;
+            int count = files.Length;
+            bool displayPercentage = true;
+            Console.Write("Completed:");
             foreach (string file in files)
             {
-                string curFile = System.IO.Path.GetFullPath(file);
-                curFile = curFile.Replace(sourceDirectory, "");
-                MoveFile(curFile);
+                MoveFile(file);
+                index++;
+                int percentage = (index*100)/count;
+                if (percentage % 10 == 0)
+                {
+                    if (displayPercentage)
+                    {
+                        displayPercentage = false;
+                        Console.Write(" {0}%", percentage);
+                    }
+                }
+                else if (!displayPercentage)
+                {
+                    displayPercentage = true;
+                }
             }
+            Console.Write("\n");
+            Console.WriteLine("Completed: {0}", sourcePath);
         }
 
         /// <summary>
@@ -112,12 +120,17 @@ namespace AutomaticFileMoveConsoleApp
             string sourceFile = "";
             string destinationFile = "";
 
-            sourceFile = @"" + sourceDirectory + "\\" + fileName;
-            destinationFile = @"" + destinationDirectory + "\\" + fileName;
+            sourceFile = fileName;
+            FileInfo sf = new FileInfo(sourceFile);
+            destinationFile = @"" + destinationDirectory + "\\" + sf.Name;
+            FileInfo df = new FileInfo(destinationFile);
 
+
+            
 
             //To overwrite if file already exists in destination, the destination file must be deleted first
-            File.Delete(destinationFile);
+            if (df.Exists)
+                df.Delete();
             
             // To move a file or folder to a new location:
             bool fileMoved = false;
@@ -128,14 +141,12 @@ namespace AutomaticFileMoveConsoleApp
                 try
                 {
                     tries++;
-                    System.IO.File.Move(sourceFile, destinationFile);
+                    sf.MoveTo(destinationFile);
                     fileMoved = true;
-                    filesMovedCount++;
-                    Console.WriteLine(String.Format("File {0}: {1}", filesMovedCount, sourceFile.Replace(sourceDirectory,"")));
-                    
                 }
                 catch
                 {
+                    fileMoved = false;
                 }
             }
         }
