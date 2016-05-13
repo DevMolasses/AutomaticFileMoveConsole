@@ -114,41 +114,44 @@ namespace AutomaticFileMoveConsoleApp
         /// Moves filename from the source path to the destination path as defined on the form
         /// OVERWRITES all duplicated filenames
         /// </summary>
-        /// <param name="fileName"></param>
-        static void MoveFile(string fileName)
+        /// <param name="sourceFile"></param>
+        static void MoveFile(string sourceFile)
         {
-            string sourceFile = "";
             string destinationFile = "";
 
-            sourceFile = fileName;
             FileInfo sf = new FileInfo(sourceFile);
             destinationFile = @"" + destinationDirectory + "\\" + sf.Name;
-            FileInfo df = new FileInfo(destinationFile);
-
-
-            
+            //FileInfo df = new FileInfo(destinationFile);
 
             //To overwrite if file already exists in destination, the destination file must be deleted first
-            if (df.Exists)
-                df.Delete();
+            //if (df.Exists)
+            //    df.Delete();
             
             // To move a file or folder to a new location:
-            bool fileMoved = false;
-            int tries = 0;
-            while (!fileMoved)
+            //bool fileMoved = false;
+            //int tries = 0;
+            //while (!fileMoved)
+            //{
+            //    if (tries == 1000) break;
+            try
             {
-                if (tries == 1000) break;
-                try
+                //tries++;
+                sf.MoveTo(destinationFile);
+                //fileMoved = true;
+            }
+            catch (IOException)
+            {
+                if (File.Exists(destinationFile))
                 {
-                    tries++;
+                    File.Delete(destinationFile);
                     sf.MoveTo(destinationFile);
-                    fileMoved = true;
-                }
-                catch
-                {
-                    fileMoved = false;
                 }
             }
+            catch
+            {
+                //fileMoved = false;
+            }
+            //}
         }
 
     }
